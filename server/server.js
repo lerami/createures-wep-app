@@ -2,7 +2,6 @@
 const express = require("express"); 
 const mongoose = require("mongoose"); 
 const bodyParser = require('body-parser');
-const router = express.Router();
 
 //Import routes
 const user = require('./routes/user');
