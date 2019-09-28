@@ -7,6 +7,17 @@ const router = express.Router();
 //Import routes
 const user = require('./routes/user');
 
+//Connecting to database
+mongoose
+  .connect("mongodb://localhost:27017/createuresdb")
+  .then(() => {
+    console.log("Connected to mongoDB");
+  })
+  .catch((e) => {
+    console.log("Error while DB connecting");
+    console.log(e);
+  });
+
 //Define express object
 const app = express();
 
