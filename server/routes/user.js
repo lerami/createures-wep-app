@@ -1,9 +1,8 @@
 const express = require('express');
-const User = require('../schema/User');
+const account = require('./services/account');
 const router = express.Router();
 
-router.get('/', (req,res) => {
-    res.json({'user': 'isWorking'});
-});
+router.post('/register', (req,res) => account.register(req,res));
+router.post('/login', (req,res) => account.login(req,res));
 
 module.exports = router;
