@@ -5,35 +5,34 @@ const account = {};
 account.signup = async function(req, res) {
     const { password, email } = req.body;
     if (!email || !password) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         return res.status(400).json({
-            text: "Requête invalide"
+            text: "invalid request"
         });
     }
-    // Création d'un objet user, dans lequel on hash le mot de passe
+    //hash password in a user object
     const user = {
         email,
         password: passwordHash.generate(password)
     };
-    // On check en base si l'utilisateur existe déjà
+    //check if the user already exists
     try {
         const findUser = await User.findOne({
             email
         });
         if (findUser) {
             return res.status(400).json({
-                text: "L'utilisateur existe déjà"
+                text: "user already exists!"
             });
         }
     } catch (error) {
         return res.status(500).json({ error });
     }
     try {
-        // Sauvegarde de l'utilisateur en base
+        //save user in db
         const userData = new User(user);
         const userObject = await userData.save();
         return res.status(200).json({
-            text: "Succès",
+            text: "success",
             token: userObject.getToken()
         });
     } catch (error) {
@@ -44,25 +43,24 @@ account.signup = async function(req, res) {
 account.login = async function(req, res) {
     const { password, email } = req.body;
     if (!email || !password) {
-        //Le cas où l'email ou bien le password ne serait pas soumit ou nul
         return res.status(400).json({
-            text: "Requête invalide"
+            text: "invalid request"
         });
     }
     try {
-        // On check si l'utilisateur existe en base
+        //check if user exists
         const findUser = await User.findOne({ email });
         if (!findUser)
             return res.status(401).json({
-                text: "L'utilisateur n'existe pas"
+                text: "this user does not exist"
             });
         if (!findUser.authenticate(password))
             return res.status(401).json({
-                text: "Mot de passe incorrect"
+                text: "invalid password"
             });
         return res.status(200).json({
             token: findUser.getToken(),
-            text: "Authentification réussi"
+            text: "authenticated successfully"
         });
     } catch (error) {
         return res.status(500).json({
